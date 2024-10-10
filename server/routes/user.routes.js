@@ -2,14 +2,17 @@ const Router = require('express')
 const router = new Router()
 const userController = require('../controller/user.controller')
 
-router.post('/user', userController.createUser)
+//Создание пользователя
+router.post('/createUser', userController.createUser)
+
+//Получение пользователя
 router.post('/getuser', userController.getUser)
-router.post('/getusernickname',userController.getUserNickName)
-router.post('/getuserlikes',userController.getLikedPubs)
-router.post('/getuserfavor',userController.getFavouriteObject)
+
+//Удаление пользователя
 router.delete('/user', userController.deleteUser)
+
+//Установка токена телефона к юзеру
 router.put('/setusertoken', userController.setUserToken)
-router.put('/setNewAvatar', userController.setUserAvatar)
 
 
 module.exports = router

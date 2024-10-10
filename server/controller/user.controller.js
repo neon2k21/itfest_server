@@ -1,22 +1,34 @@
 const db = require('../config')
 
+//Создание пользователя
+router.post('/createUser', userController.createUser)
 
+//Получение пользователя
+router.post('/getuser', userController.getUser)
+
+//Удаление пользователя
+router.delete('/user', userController.deleteUser)
+
+//Установка токена телефона к юзеру
+router.put('/setusertoken', userController.setUserToken)
 
 class UserController{
 
+    //Создание пользователя
     async createUser(req,res){
         
-        const { nickname, login, pass } = req.body
+        const { login, pass } = req.body
         const sql = (
-            `insert into users (nickname, login, pass, token, role) values (?, ?, ?,"",1);`
+            `insert into users (login, pass, token) values (?, ?, "");`
         )
-        db.all(sql,[nickname, login, pass], (err,rows) => {
+        db.all(sql,[ login, pass ], (err,rows) => {
             if (err) return res.json(err)
             else return res.json(rows)     
         })
         
     }   
 
+    //Получение пользователя
     async getUser(req,res){
         const { login, password} = req.body
         console.log(login, password)
@@ -30,20 +42,8 @@ class UserController{
     })
     }
 
-    async getUserNickName(req,res){
-        const { id } = req.body
-       
-        const sql = (
-            `select * from users where id=?;`
-        )
-        db.all(sql,[id], (err,rows) => {
-            if (err) return res.json(err)
-            else res.json(rows)
-    })
-    }
 
-
-
+    //Удаление пользователя
     async deleteUser(req,res){
         const { id } = req.body
         const sql = (
@@ -55,6 +55,7 @@ class UserController{
          })
     }    
 
+    //Установка токена телефона к юзеру
     async setUserToken(req,res){
         const {user, token} =req.body
         const sql = (
@@ -62,58 +63,6 @@ class UserController{
         )
 
         db.all(sql,[token, user], (err,rows) => {
-            if (err) return res.json(err)
-            else res.json(rows)
-        })
-    }
-
-    async getFavouriteObject(req,res){
-        const {id} = req.body
-
-
-        const sql = (
-            ` SELECT o.*
-            FROM objects o
-            INNER JOIN users_favourite_objects ufo ON o.id = ufo.object_id
-            WHERE ufo.user = ?;`
-        )
-
-        db.all(sql,[id], (err,rows) => {
-            if (err) return res.json(err)
-            else res.json(rows)
-        })
-
-        
-       
-    }
-
-    async getLikedPubs(req,res){
-        
-        const {id} = req.body
-
-
-        const sql = (
-            ` SELECT p.*
-            FROM publications p
-            INNER JOIN Likes l ON p.id = l.publication_id
-            WHERE l.useradd = ?;`
-        )
-
-        db.all(sql,[id], (err,rows) => {
-            if (err) return res.json(err)
-            else res.json(rows)
-        })
-
-}
-
-
-    async setUserAvatar(req,res){
-        const {id,avatar} =req.body
-        const sql = (
-            ` update users set avatar=? where id=?;`
-        )
-
-        db.all(sql,[avatar, id], (err,rows) => {
             if (err) return res.json(err)
             else res.json(rows)
         })
