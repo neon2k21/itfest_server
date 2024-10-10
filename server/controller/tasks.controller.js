@@ -199,32 +199,33 @@ class TasksController {
 
 
 
-async function getPubOwnerToken(pub_id) {
-    return new Promise((resolve, reject) => {
-        db.get(
-            `SELECT users.token
-            FROM users
-            JOIN publications ON users.id = publications.useradd
-            WHERE publications.id = ?;`, [pub_id], (err, row) => {
-            if (err) reject(err); // I assume this is how an error is thrown with your db callback
-            resolve(row);
-        });
-    });
-}
+// async function getPubOwnerToken(task_id) {
+//     return new Promise((resolve, reject) => {
+//         db.get(
+//             `SELECT u.token
+//                 FROM users u
+//                 JOIN tasks t ON u.id = t.user_id
+//                 WHERE t.id = ?;`, [task_id], (err, row) => {
+//             if (err) reject(err); 
+//             resolve(row);
+//         });
+//     });
+// }
 
-async function sendNotifeIfComment(pub_id) {
-    const receiveToken = await getPubOwnerToken(pub_id)
-    const message = {
-        notification: {
-            title: "Новый комментарий",
-            body: "Только что кто-то оставил новый комментарий!",
-        },
-        token: receiveToken.token
-    }
-    getMessaging().send(message)
+// async function sendNotife(task_id) {
+//     const receiveToken = await getPubOwnerToken(task_id)
+    
+//     const message = {
+//         notification: {
+//             title: `Задача ${task_name}`,
+//             body:  `Срок ${deadline}`,
+//         },
+//         token: receiveToken.token
+//     }
+//     getMessaging().send(message)
 
-}
+// }
 
 
 
-module.exports = new PublicationController()
+module.exports = new TasksController()
