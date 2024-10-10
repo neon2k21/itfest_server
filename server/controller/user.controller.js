@@ -1,16 +1,5 @@
 const db = require('../config')
 
-//Создание пользователя
-router.post('/createUser', userController.createUser)
-
-//Получение пользователя
-router.post('/getuser', userController.getUser)
-
-//Удаление пользователя
-router.delete('/user', userController.deleteUser)
-
-//Установка токена телефона к юзеру
-router.put('/setusertoken', userController.setUserToken)
 
 class UserController{
 
@@ -31,7 +20,6 @@ class UserController{
     //Получение пользователя
     async getUser(req,res){
         const { login, password} = req.body
-        console.log(login, password)
         const sql = (
             `select * from users where (login=? AND pass=?);`
         )
