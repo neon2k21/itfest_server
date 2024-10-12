@@ -6,13 +6,13 @@ const userController = require('../controller/user.controller')
 router.post('/createUser', userController.createUser)
 
 //Получение пользователя
-router.post('/getuser', userController.getUser)
+router.post('/getUser', userController.getUser)
 
 //Удаление пользователя
-router.delete('/user', userController.deleteUser)
+router.delete('/deleteUser', userController.deleteUser)
 
 //Установка токена телефона к юзеру
-router.put('/setusertoken', userController.setUserToken)
+router.put('/setUserToken', userController.setUserToken)
 
 
 module.exports = router
