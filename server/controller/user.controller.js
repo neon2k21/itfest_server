@@ -4,18 +4,35 @@ const db = require('../config')
 class UserController{
 
     //Создание пользователя
-    async createUser(req,res){
+    async createUser(req, res) {
+        const { login, pass } = req.body;
+    
+        // Сначала проверим, существует ли уже пользователь с таким логином
+        const checkUserSql = "SELECT * FROM users WHERE login = ?";
         
-        const { login, pass } = req.body
-        const sql = (
-            `insert into users (login, pass, token) values (?, ?, "");`
-        )
-        db.all(sql,[ login, pass ], (err,rows) => {
-            if (err) return res.json(err)
-            else return res.json(rows)     
-        })
-        
-    }   
+        db.get(checkUserSql, [login], (err, row) => {
+            if (err) {
+                return res.status(500).json({ error: 'Database error' });
+            }
+    
+            // Если пользователь с таким логином уже существует
+            if (row) {
+                return res.status(400).json({ error: 'User with this login already exists' });
+            }
+    
+            // Если логин уникален, продолжаем с созданием пользователя
+            const insertUserSql = "INSERT INTO users (login, pass, token) VALUES (?, ?, ?)";
+    
+            db.run(insertUserSql, [login, pass, ""], function(err) {
+                if (err) {
+                    return res.status(500).json({ error: 'Failed to create user' });
+                } else {
+                    return res.status(201).json({ id: this.lastID, login: login }); // Возвращаем ID нового пользователя
+                }
+            });
+        });
+    }
+    
 
     //Получение пользователя
     async getUser(req,res){
@@ -32,17 +49,47 @@ class UserController{
 
 
     //Удаление пользователя
-    async deleteUser(req,res){
-        const { id } = req.body
-        const sql = (
-            `delete from users where id =?;`
-        )
-        db.all(sql,[id], (err,rows) => {
-            if (err) return res.json(err)
-            else res.json(rows)
-         })
-    }    
-
+    async deleteUser(req, res) {
+        const { id } = req.body;
+    
+        // Проверяем, указан ли id и является ли он числом
+        if (!id || isNaN(id)) {
+            return res.status(400).json({ message: 'Invalid user ID' });
+        }
+    
+        // Проверяем, существует ли пользователь с данным ID
+        const checkUserSql = 'SELECT * FROM users WHERE id = ?';
+    
+        db.get(checkUserSql, [id], (err, user) => {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+    
+            // Если пользователь не существует, возвращаем ошибку
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+    
+            // Удаляем пользователя
+            const deleteSql = 'DELETE FROM users WHERE id = ?';
+    
+            db.run(deleteSql, [id], function (err) {
+                if (err) {
+                    return res.status(500).json({ error: err.message });
+                }
+    
+                // Проверяем, сколько записей было удалено
+                if (this.changes === 0) {
+                    return res.status(404).json({ message: 'User not found' });
+                }
+    
+                return res.json({ message: 'User deleted successfully' });
+            });
+        });
+    }
+    
+    
+    
     //Установка токена телефона к юзеру
     async setUserToken(req,res){
         const {user, token} =req.body

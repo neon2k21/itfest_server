@@ -8,14 +8,8 @@ router.post('/createTask', tasksController.createTask)
 // изменение состояния задания
 router.put('/updateTaskStage', tasksController.updateTaskStage)
 
-// получение всех заданий пользователя по фильтру
-router.post('/getAllUserTasksByFilter',tasksController.getAllUserTasksByFilter)
-
 // получение всех заданий пользователя
 router.post('/getAllUserTasks', tasksController.getAllUserTasks)
-
-// открытие конкретного задания
-router.post('/getCurrentTask', tasksController.getCurrentTask)
 
 // удаление задания
 router.delete('/deleteTask', tasksController.deleteTask)
@@ -28,8 +22,6 @@ router.post('/createGraphByFilterForMonth', tasksController.createGraphByFilterF
 
 // создание графика или диаграммы по завершенным и не завершенным заданиям на день
 router.post('/createGraphByFilterForDay', tasksController.createGraphByFilterForDay)
-
-
 
 
 module.exports = router
