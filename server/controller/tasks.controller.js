@@ -226,6 +226,7 @@ const sendNotification = (token, task) => {
       rows.forEach((task) => {
         const percentage = calculatePercentage(task.date_of_creation, task.deadline);
         console.log(task)
+        sendNotification(task.token, task);
         // Отправляем уведомление, если процент совпадает с одним из заданных значений
         if ([10, 15, 20, 25, 30].includes(Math.floor(percentage))) {
           sendNotification(task.token, task);
