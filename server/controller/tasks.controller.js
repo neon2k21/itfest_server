@@ -172,6 +172,8 @@ class TasksController {
 }
 
 const sendNotification = (token, task) => {
+    console.log('token:' ,token)
+    console.log('task:' ,task)
 
     const message = {
       notification: {
