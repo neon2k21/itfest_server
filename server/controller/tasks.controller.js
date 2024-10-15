@@ -212,7 +212,7 @@ const sendNotification = (token, task) => {
       SELECT t.id, t.name, t.description, t.deadline, t.date_of_creation, u.token
       FROM tasks t
       JOIN users u ON t.user_id = u.id
-      WHERE t.completed = 1
+      WHERE t.completed = 0
     `;
   
     db.all(query, [], (err, rows) => {
