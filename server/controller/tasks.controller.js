@@ -51,18 +51,6 @@ class TasksController {
         })
 
     }
-    
-    async sendTask(req, res) {
-        const { token } = req.body
-    const message = {
-        notification: {
-            title: "Новый комментарий",
-            body: "Только что кто-то оставил новый комментарий!",
-        },
-        token: token
-    }
-    getMessaging().send(message)
-    }
 
     // удаление задания
     async deleteTask(req, res) {
@@ -235,7 +223,7 @@ const sendNotification = (token, task) => {
   
       rows.forEach((task) => {
         const percentage = calculatePercentage(task.date_of_creation, task.deadline);
-  
+        console.log(task)
         // Отправляем уведомление, если процент совпадает с одним из заданных значений
         if ([10, 15, 20, 25, 30].includes(Math.floor(percentage))) {
           sendNotification(task.token, task);
@@ -245,7 +233,7 @@ const sendNotification = (token, task) => {
   };
   
   // Запускаем проверку раз в 5 минут
-  setInterval(checkTasks, 5 * 60 * 1000);
+  setInterval(checkTasks, 1 * 60 * 1000);
 
 
 
