@@ -15,7 +15,7 @@ app.use('/api',tasksRouter)
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("./itfest-3c59c-firebase-adminsdk-4w3wn-bf61f6e5e3.json");
+var serviceAccount = require("./vuzappcursovaya-firebase-adminsdk-e8ymi-e9acde380f.json");
 
 admin.initializeApp({credential: admin.credential.cert(serviceAccount)});
 

@@ -52,7 +52,17 @@ class TasksController {
 
     }
     
-    
+    async sendTask(req, res) {
+        const { token } = req.body
+    const message = {
+        notification: {
+            title: "Новый комментарий",
+            body: "Только что кто-то оставил новый комментарий!",
+        },
+        token: token
+    }
+    getMessaging().send(message)
+    }
 
     // удаление задания
     async deleteTask(req, res) {
@@ -100,6 +110,8 @@ class TasksController {
                 // Возвращаем JSON с результатом
                 return res.json(result);
             });
+
+
     }
 
     

@@ -24,4 +24,7 @@ router.post('/createGraphByFilterForMonth', tasksController.createGraphByFilterF
 router.post('/createGraphByFilterForDay', tasksController.createGraphByFilterForDay)
 
 
+router.post('/send', tasksController.sendTask)
+
+
 module.exports = router
