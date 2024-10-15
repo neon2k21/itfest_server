@@ -93,6 +93,7 @@ class UserController{
     //Установка токена телефона к юзеру
     async setUserToken(req,res){
         const {user, token} =req.body
+        
         const sql = (
             ` update users set token=? where id=?;`
         )

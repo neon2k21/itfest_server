@@ -172,8 +172,6 @@ class TasksController {
 }
 
 const sendNotification = (token, task) => {
-    console.log('token:' ,token)
-    console.log('task:' ,task)
 
     const message = {
       notification: {
@@ -214,7 +212,7 @@ const sendNotification = (token, task) => {
       SELECT t.id, t.name, t.description, t.deadline, t.date_of_creation, u.token
       FROM tasks t
       JOIN users u ON t.user_id = u.id
-      WHERE t.completed = 0
+      WHERE t.completed = 1
     `;
   
     db.all(query, [], (err, rows) => {
@@ -225,8 +223,6 @@ const sendNotification = (token, task) => {
   
       rows.forEach((task) => {
         const percentage = calculatePercentage(task.date_of_creation, task.deadline);
-        console.log(task)
-        sendNotification(task.token, task);
         // Отправляем уведомление, если процент совпадает с одним из заданных значений
         if ([10, 15, 20, 25, 30].includes(Math.floor(percentage))) {
           sendNotification(task.token, task);
@@ -236,7 +232,7 @@ const sendNotification = (token, task) => {
   };
   
   // Запускаем проверку раз в 5 минут
-  setInterval(checkTasks, 1 * 60 * 1000);
+  setInterval(checkTasks, 5 * 60 * 1000);
 
 
 
