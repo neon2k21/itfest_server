@@ -27,11 +27,11 @@ class TasksController {
     // изменение состояния задания
     async updateTaskStage(req, res) {
         
-        const { task_id, completed } = req.body
+        const { task_id } = req.body
         const sql = (
             `update tasks set completed=1 where id= ?;`
         )
-        db.all(sql,[ completed, task_id  ], (err,rows) => {
+        db.all(sql,[ task_id  ], (err,rows) => {
             if (err) return res.json(err)
             else return res.json(rows)     
         })
