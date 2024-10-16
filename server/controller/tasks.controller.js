@@ -4,21 +4,25 @@ const { getMessaging } = require("firebase-admin/messaging")
 const moment = require('moment');
 
 
+
+
 class TasksController {
 
     // создание задания
     async createTask(req, res) {
         const now = new Date();
-        const date_of_creation = format(now, 'dd/MM/yy HH:mm');
+        const date_of_creation = format(now, 'yyyy-MM-dd HH:mm');
     
         const { user_id, name, description, deadline } = req.body;
+        
+
     
         const sql = `
             INSERT INTO tasks (user_id, name, description, date_of_creation, deadline, completed) 
             VALUES (?, ?, ?, ?, ?, 0);
         `;
         
-        db.all(sql, [user_id, name, description, date_of_creation, deadline], (err, rows) => {
+        db.all(sql, [user_id, name, description, date_of_creation,  deadline], (err, rows) => {
             if (err) return res.json(err);
             return res.json(rows);
         });
