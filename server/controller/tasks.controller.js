@@ -29,7 +29,7 @@ class TasksController {
         
         const { task_id, completed } = req.body
         const sql = (
-            `update tasks set completed=? where id= ?;`
+            `update tasks set completed=1 where id= ?;`
         )
         db.all(sql,[ completed, task_id  ], (err,rows) => {
             if (err) return res.json(err)
