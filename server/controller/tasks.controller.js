@@ -11,7 +11,7 @@ class TasksController {
     // создание задания
     async createTask(req, res) {
         const now = new Date();
-        const date_of_creation = format(now, 'yyyy-MM-dd HH:mm');
+        const date_of_creation = format(now, 'yyyy-MM-dd HH:mm:ss');
     
         const { user_id, name, description, deadline } = req.body;
         
@@ -74,11 +74,13 @@ class TasksController {
         const { user_id } = req.body
             const sql = `
                 SELECT 
-                  completed,
-                  COUNT(*) as task_count
-                FROM tasks
-                WHERE date_of_creation BETWEEN date('now', '-7 days') AND date('now') and user_id=?
-                GROUP BY completed;
+    completed,
+    COUNT(*) AS task_count
+FROM tasks
+WHERE date_of_creation >= DATE('now', '-6 days', 'start of day') 
+  AND date_of_creation < DATE('now', 'start of day', '+1 day') 
+  AND user_id = ? 
+GROUP BY completed;
             `;
         
             db.all(sql, [user_id], (err, rows) => {
@@ -113,12 +115,14 @@ class TasksController {
         const { user_id } = req.body
 
         const sql = `
-        SELECT 
-          completed,
-          COUNT(*) as task_count
-        FROM tasks
-        WHERE date_of_creation = date('now') and user_id=? 
-        GROUP BY completed;
+       SELECT 
+    completed,
+    COUNT(*) AS task_count
+FROM tasks
+WHERE date_of_creation >= DATE('now', 'start of day') 
+  AND date_of_creation < DATE('now', 'start of day', '+1 day') 
+  AND user_id = ?
+GROUP BY completed;
     `;
 
     db.all(sql, [user_id], (err, rows) => {
@@ -146,11 +150,13 @@ class TasksController {
         const { user_id } = req.body
         const sql = `
         SELECT 
-          completed,
-          COUNT(*) as task_count
-        FROM tasks
-        WHERE date_of_creation BETWEEN date('now', 'start of month') AND date('now') and user_id=?
-        GROUP BY completed;
+    completed,
+    COUNT(*) AS task_count
+FROM tasks
+WHERE date_of_creation >= DATE('now', 'start of month') 
+  AND date_of_creation < DATE('now', 'start of month', '+1 month') 
+  AND user_id = ? 
+GROUP BY completed;
     `;
 
     db.all(sql, [user_id], (err, rows) => {
